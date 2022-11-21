@@ -14,8 +14,9 @@
   }
 %}
 
+DUEPUNTI_PARI_MINUSCOLE = (([:]{2})+)([a-z]+)
+DUEPUNTI_DISPARI_MINUSCOLE = (([:]{2})+)[:]([a-z]+)
 DOPPIAMAIUSCOLA = ([A-Z]{2})[a-z]*
-DUEPUNTI_MINUSCOLE = ([:]+)[a-z]*
 MATRICOLA = [8569]+
 
 %%
@@ -28,8 +29,12 @@ MATRICOLA = [8569]+
                         return Parser.OPEN_QUADRA; }
 "]"					  { yyparser.yylval = new ParserVal(""+yycharat(0));
                         return Parser.CLOSE_QUADRA; }
-[a-z]+ | {DOPPIAMAIUSCOLA} |
-{DUEPUNTI_MINUSCOLE} | {MATRICOLA}		{ yyparser.yylval = new ParserVal(yytext());
+[a-z]+ | {DOPPIAMAIUSCOLA} | {MATRICOLA}		{ yyparser.yylval = new ParserVal(yytext());
 												return Parser.SKIP; }
+{DUEPUNTI_PARI_MINUSCOLE}		{ yyparser.yylval = new ParserVal(yytext());
+								return Parser.SKIP1; }
+{DUEPUNTI_DISPARI_MINUSCOLE}	{ yyparser.yylval = new ParserVal(yytext());
+								return Parser.SKIP2; }
+
 
 [^] {} /*butta il resto*/
